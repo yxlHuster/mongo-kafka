@@ -66,7 +66,7 @@ public class KafkaSink extends AbstractSink {
                             (topic, message.get_id(), message.toString().getBytes("UTF-8"));
                     messageList.add(data);
                 }
-                if (msgSize > 0) {
+                if (!messageList.isEmpty()) {
                     producer.send(messageList);
                 } else {
                     // Sleep for 50 ms and then wake up

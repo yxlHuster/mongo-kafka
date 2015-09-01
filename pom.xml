@@ -18,6 +18,7 @@
         <com.alibaba.fastjson.version>1.1.36</com.alibaba.fastjson.version>
         <kafka.version>0.8.1.1</kafka.version>
         <commons.cli.version>1.2</commons.cli.version>
+        <log4j.version>1.2.17</log4j.version>
     </properties>
 
     <dependencies>
@@ -93,7 +94,7 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+            <version>${log4j.version}</version>
         </dependency>
 
     </dependencies>
