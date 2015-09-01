@@ -17,7 +17,7 @@
             <pattern>%d{HH:mm:ss.SSS}  %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
         </encoder>
     </appender>
-    <root level="info" name="com.zuoye" additivity="false">
+    <root level="info" name="com.zy.bi" additivity="false">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>

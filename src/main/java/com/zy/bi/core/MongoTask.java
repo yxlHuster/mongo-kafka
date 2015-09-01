@@ -2,6 +2,7 @@ package com.zy.bi.core;
 
 import com.google.common.collect.Sets;
 import com.mongodb.*;
+import org.bson.types.BSONTimestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,9 +120,22 @@ public class MongoTask implements Callable<Boolean>, Runnable, Serializable {
             // Get the next object
             DBObject object = cursor.next();
             // Build the query
-            query = new BasicDBObject("ts", new BasicDBObject("$gt", object.get("ts")));
+            query = new BasicDBObject("ts", new BasicDBObject(QueryOperators.GT, object.get("ts")));
         }
         // Return the query to find the last op log entry
+        return query;
+    }
+
+    /**
+     * make query cursor on last checkpoint
+     * @param timestamp seconds
+     * @param increment millseconds
+     * @return
+     */
+    public DBObject mkOpLogEntry(int timestamp, int increment) {
+        BSONTimestamp ts = new BSONTimestamp(timestamp, increment);
+        final BasicDBObject query = new BasicDBObject();
+        query.append("ts", new BasicDBObject(QueryOperators.GT, ts));
         return query;
     }
 

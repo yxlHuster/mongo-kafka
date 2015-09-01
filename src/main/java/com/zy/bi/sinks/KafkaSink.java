@@ -58,9 +58,12 @@ public class KafkaSink extends AbstractSink {
                 messageList.clear();
                 for (; msgSize < batchSize; msgSize++) {
                     DBObject object = queue.take();
-                    if (object == null) break;
+                    if (object == null) continue;
                     Message message = MongoUtil.transOpLog2Message(object.toString());
-                    if (message == null) continue;
+                    if (message == null) {
+                        LOGGER.warn("oplog trans error! dbobject = {}", object.toString());
+                        continue;
+                    }
                     // Create a message and add to buffer
                     KeyedMessage<String, byte[]> data = new KeyedMessage<String, byte[]>
                             (topic, message.get_id(), message.toString().getBytes("UTF-8"));

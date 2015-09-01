@@ -9,6 +9,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.CommandResult;
 import com.mongodb.Mongo;
 import org.apache.commons.lang3.StringUtils;
+import scala.util.parsing.combinator.testing.Str;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +59,6 @@ public class MongoUtil {
         try {
             JSONObject obj = JSON.parseObject(oplog);
             JSONObject timeObj = obj.getJSONObject("ts");
-            Preconditions.checkNotNull(timeObj);
             String time = timeObj.getString("$ts");
             if (StringUtils.isBlank(time)) return null;
             long ts = Longs.tryParse(time);
@@ -66,11 +66,11 @@ public class MongoUtil {
             if (!Common.in_range(op, "i", "u", "d")) return null;
             String ns = obj.getString("ns");
             if (StringUtils.isBlank(ns)) return null;
-            JSONObject o2 = obj.getJSONObject("o2");
-            if (o2 == null) return null;
-            String _id = o2.getString("_id");
-            if (StringUtils.isBlank(_id)) return null;
+            JSONObject o2 = obj.getJSONObject("o2"); // exists if only op is u
+            if (StringUtils.equals(op, "u") && o2 == null) return null;
             String o = obj.getString("o");
+            if (StringUtils.isBlank(o)) return null;
+            String _id = obj.getJSONObject("o").getString("_id");
             Message message = new Message();
             message.setTs(ts);
             message.setOp(op);
